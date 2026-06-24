@@ -1,0 +1,7 @@
+# 临时文件
+*.tmp
+*.log
+.DS_Store
+
+# 大文件（超过 100MB 的 HTML 请压缩）
+# *.html
