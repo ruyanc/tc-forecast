@@ -1,21 +1,22 @@
-# WRF 预报可视化
+# WRF 台风预报可视化
 
-WRF 台风预报路径交互式可视化页面。
+实时台风路径预报和强度分析。
 
-## 功能
+## 最新预报
 
-- 🌍 Leaflet 地图底图（CartoDB Dark）
-- 🌀 台风路径与风圈半径（34/50/64kt）
-- 🌊 SST（海表温度）叠加
-- 🌧️ 降水场可视化
-- 💨 动态粒子风场
-- 📊 Plotly 强度时序图（中国气象局热带气旋等级）
-- 📍 TCvitals 实况路径与预报轨迹对比
+访问 [预报页面](https://ruyanc.github.io/tc-forecast/) 查看最新结果。
 
-## 访问
+## 数据来源
 
-在线访问：[点击查看](https://你的用户名.gitee.io/wrf-forecast/)
+- 模式：WRF-ARW v4.6
+- 分辨率：3 km
+- 初始场：GFS / GDAS
+- 数据同化：GSI + FGAT
 
-## 更新日志
+## 更新频率
 
-- 2026-06-24: 初始发布
+每日 00Z / 12Z 自动更新
+
+---
+
+*Powered by WRF Forecast System*
