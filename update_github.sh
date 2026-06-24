@@ -3,21 +3,33 @@
 #  GitHub Pages 更新脚本
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 #
-#  用途：自动提交和推送新的预报文件到 GitHub Pages
+#  用途：自动更新 index.html 指向、提交并推送到 GitHub Pages
 #
 #  使用方法：
-#    bash update_github.sh [commit_message]
+#    bash update_github.sh [--tag TAG] [commit_message]
 #
 #  示例：
-#    bash update_github.sh "更新 2026062312 预报"
-#    bash update_github.sh  # 默认提交信息：自动更新 YYYY-MM-DD HH:MM:SS
+#    bash update_github.sh --tag 2026062312_nrt "更新 2026062312 预报"
+#    bash update_github.sh --tag 2026062312_nrt   # 自动生成提交信息
+#    bash update_github.sh "仅提交当前改动"        # 不更新 index.html
 #
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 set -e
 
-# 默认提交信息
-COMMIT_MSG="${1:-自动更新 $(date '+%Y-%m-%d %H:%M:%S')}"
+# 解析参数
+TAG=""
+POSITIONAL=()
+while [[ $# -gt 0 ]]; do
+    case "$1" in
+        --tag)
+            TAG="$2"; shift 2 ;;
+        *)
+            POSITIONAL+=("$1"); shift ;;
+    esac
+done
+
+COMMIT_MSG="${POSITIONAL[0]:-自动更新 $(date '+%Y-%m-%d %H:%M:%S')}"
 
 echo ""
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
@@ -41,6 +53,17 @@ if ! git remote | grep -q "^origin$"; then
     echo "请先运行初始化脚本："
     echo "  bash setup_github.sh"
     exit 1
+fi
+
+# 更新 index.html 软链接
+if [ -n "$TAG" ]; then
+    TARGET="track_${TAG}.html"
+    if [ ! -f "$TARGET" ]; then
+        echo "✗ 错误：找不到文件 $TARGET"
+        exit 1
+    fi
+    ln -sf "$TARGET" index.html
+    echo "→ index.html → $TARGET"
 fi
 
 # 显示当前状态
@@ -91,4 +114,3 @@ echo ""
 echo "查看部署状态："
 echo "  https://github.com/$REPO_INFO/actions"
 echo ""
-
